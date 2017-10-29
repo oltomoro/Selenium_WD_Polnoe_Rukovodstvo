@@ -14,7 +14,8 @@ public class SimpleTest {
 
     @Test
     public void firstTest(){
-        driver.get("http://google.com");
+        driver.navigate().to("http://google.com");
+        //driver.get("http://google.com");
     }
 
     @After
