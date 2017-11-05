@@ -3,14 +3,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 
 public class LoginTest {
     public WebDriver driver;
 
     @Before
     public void beforeTest(){
-        driver = new ChromeDriver();
+        //driver = new ChromeDriver();
+        driver = new InternetExplorerDriver();
     }
 
     @Test
