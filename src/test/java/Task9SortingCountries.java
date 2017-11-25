@@ -7,9 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -37,52 +35,55 @@ public class Task9SortingCountries {
 
         //  получаем локаторы
         //--------------------------------
-        String locCountiesTable = "//table[@class='dataTable']";
+        //String locCountiesTable = "//table[@class='dataTable']";
         String locCountriesList = "//table[@class='dataTable']//td[5]/a"; // локатор списка стран
-        String locCountryLink = "./a"; // локатор линка страны
-        String locZonesList = "//table[@class='dataTable']//td[6]"; // локатор списка зон
+        String locZonesList = "//table[@class='dataTable']//td[4]/a"; // локатор списка зон
+        String locRow = "//table[@class='dataTable']//tr[@class='row']";
 
         // проверяем сортировку
         //--------------------------------
-        WebElement tableParent = driver.findElement(By.xpath(locCountiesTable));
-        List<WebElement> rowsParent = tableParent.findElements(By.xpath(".//tr[@class='row']"));
+        //WebElement tableParent = driver.findElement(By.xpath(locCountiesTable));
+        //List<WebElement> rowsParent = driver.findElements(By.xpath("//table[@class='dataTable']//td[5]/a"));
 
-        List<WebElement> countriesElementsList = driver.findElements(By.xpath(locCountriesList)); // получаем список всех стран
-        List<WebElement> zonesElementsList = driver.findElements(By.xpath(locZonesList)); // получаем список всех зон
+        List<WebElement> countriesList = driver.findElements(By.xpath(locCountriesList)); // получаем список всех стран
+        //List<WebElement> zonesElementsList = driver.findElements(By.xpath(locZonesList)); // получаем список всех зон
 
-        checkSorting(rowsParent, ".//td[5]");
+        checkSorting(countriesList); // проверяем сортировку стран
 
-        for (int i = 0; i < rowsParent.size(); i++) {
-            WebElement countryLink = rowsParent.get(i).findElement(By.xpath(".//td[5]/a"));
-            String zoneValue = rowsParent.get(i).findElement(By.xpath(".//td[6]")).getText();
+        for (int i = 0; i < countriesList.size(); i++) {
+
+            //WebElement countryLink = countriesList.get(i).findElement(By.xpath(".//td[5]/a"));
+            //WebElement country = driver.findElements(By.xpath(locCountriesList)).get(i);
+            WebElement row = driver.findElements(By.xpath(locRow)).get(i);
+            String zoneValue = row.findElement(By.xpath(".//td[6]")).getText();
+
+            // если у страны есть зоны
             if (!zoneValue.equals("0")){
-                countryLink.click();
-                WebElement tableChild = driver.findElement(By.xpath(locCountiesTable));
-                List<WebElement> rowsChild = driver.findElements(By.xpath(".//tr[@class='row']"));
-
-                checkSorting(rowsChild, ".//td[3]");
+                row.findElement(By.xpath(".//td[5]/a")).click(); // переходим к списку зон
+                List<WebElement> zonesList = driver.findElements(By.xpath(locZonesList)); // получаем список зон
+                checkSorting(zonesList); // проверяем сортировку зон
+                driver.navigate().back(); // возвращаемся к списку стран
             }
         }
-
 
     }
 
     // функция проверки сортировки
-    public void checkSorting(List<WebElement> rows, String countriesNameLocator){
-        String[] countiesNamesArr = new String[rows.size()]; // создаем исходный массив для списка названий стран
-        String[] countiesNamesArrSorted = new String[rows.size()]; // создаем массив для списка названий стран, который будет сортироваться
+    public void checkSorting(List<WebElement> list){
+        String[] itemsNamesArr = new String[list.size()]; // создаем исходный массив для списка названий стран/зон
+        String[] itemssNamesArrSorted = new String[list.size()]; // создаем массив для списка названий стран/зон, который будет сортироваться
 
         // заполняем массивы одинаковыми данными
-        for (int i = 0; i < rows.size(); i++) {
-            String countryName = rows.get(i).findElement(By.xpath(countriesNameLocator)).getText(); // получаем название текущей страны
-            countiesNamesArr[i] = countryName; // добавляем название страны в исходный массив
-            countiesNamesArrSorted[i] = countryName; // добавляем название страны в сортируемый массив
+        for (int i = 0; i < list.size(); i++) {
+            String itemName = list.get(i).getText(); // получаем название текущей страны/зоны
+            itemsNamesArr[i] = itemName; // добавляем название страны/зоны в исходный массив
+            itemssNamesArrSorted[i] = itemName; // добавляем название страны/зоны в сортируемый массив
         }
 
-        Arrays.sort(countiesNamesArrSorted); // делаем сортировку одного из массивов
+        Arrays.sort(itemssNamesArrSorted); // делаем сортировку одного из массивов
 
         // проверяем, что после сортировки, порядок данных в массивах совпадает
-        Assert.assertTrue(Arrays.toString(countiesNamesArr).equals(Arrays.toString(countiesNamesArrSorted)));
+        Assert.assertTrue(Arrays.toString(itemsNamesArr).equals(Arrays.toString(itemssNamesArrSorted)));
     }
 
     @After
