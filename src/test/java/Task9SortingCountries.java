@@ -46,14 +46,10 @@ public class Task9SortingCountries {
         //List<WebElement> rowsParent = driver.findElements(By.xpath("//table[@class='dataTable']//td[5]/a"));
 
         List<WebElement> countriesList = driver.findElements(By.xpath(locCountriesList)); // получаем список всех стран
-        //List<WebElement> zonesElementsList = driver.findElements(By.xpath(locZonesList)); // получаем список всех зон
 
         checkSorting(countriesList); // проверяем сортировку стран
 
         for (int i = 0; i < countriesList.size(); i++) {
-
-            //WebElement countryLink = countriesList.get(i).findElement(By.xpath(".//td[5]/a"));
-            //WebElement country = driver.findElements(By.xpath(locCountriesList)).get(i);
             WebElement row = driver.findElements(By.xpath(locRow)).get(i);
             String zoneValue = row.findElement(By.xpath(".//td[6]")).getText();
 
